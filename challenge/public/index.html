@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>React App</title>
+</head>
+
+<body>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/datamaps.none.js"></script>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  <script>
+    function makeIndia(stateData) {
+      var bubble_map = new Datamap({
+        element: document.getElementById('india'),
+        scope: 'india',
+        geographyConfig: {
+          popupOnHover: true,
+          highlightOnHover: true,
+          borderColor: '#444',
+          borderWidth: 0.5,
+          dataUrl: 'https://rawgit.com/Anujarya300/bubble_maps/master/data/geography-data/india.topo.json'
+          //dataJson: topoJsonData
+        },
+        fills: {
+          'MAJOR': '#FF9933',
+          'MEDIUM': '#000080',
+          'MINOR': '#138808',
+          defaultFill: '#fff'
+        },
+        data: {
+          'JH': {
+            fillKey: 'MINOR'
+          },
+          'MH': {
+            fillKey: 'MINOR'
+          },
+          'CT': {
+            fillKey: 'MINOR'
+          },
+          'KA': {
+            fillKey: 'MINOR'
+          },
+          'GA': {
+            fillKey: 'MINOR'
+          },
+          'TS': {
+            fillKey: 'MINOR'
+          },
+          'AP': {
+            fillKey: 'MINOR'
+          },
+          'TN': {
+            fillKey: 'MINOR'
+          },
+          'KL': {
+            fillKey: 'MINOR'
+          },
+          'OD': {
+            fillKey: 'MINOR'
+          },
+          'WB': {
+            fillKey: 'MINOR'
+          },
+          'MN': {
+            fillKey: 'MINOR'
+          },
+          'MZ': {
+            fillKey: 'MINOR'
+          },
+          'TR': {
+            fillKey: 'MINOR'
+          },
+          'JK': {
+            fillKey: 'MAJOR'
+          },
+          'HP': {
+            fillKey: 'MAJOR'
+          },
+          'PB': {
+            fillKey: 'MAJOR'
+          },
+          'UK': {
+            fillKey: 'MAJOR'
+          },
+          'HR': {
+            fillKey: 'MAJOR'
+          },
+          'AR': {
+            fillKey: 'MAJOR'
+          },
+          'NL': {
+            fillKey: 'MAJOR'
+          },
+        },
+        setProjection: function (element) {
+          var projection = d3.geo.mercator()
+            .center([78.9629, 23.5937]) // always in [East Latitude, North Longitude]
+            .scale(1000);
+          var path = d3.geo.path().projection(projection);
+          return {
+            path: path,
+            projection: projection
+          };
+        }
+      });
+
+      let bubbles = stateData
+      // // ISO ID code for city or <state></state>
+      setTimeout(() => { // only start drawing bubbles on the map when map has rendered completely.
+        bubble_map.bubbles(bubbles, {
+          popupTemplate: function (geo, data) {
+            return `<div class="hoverinfo">State: ${data.state}<br>Confirmed: ${data.confirmed}<br>Deceased: ${data.deceased}<br>Recovered: ${data.recovered}</div>`;
+          }
+        });
+      }, 1000);
+    }
+  </script>
+</body>
+
+</html>
